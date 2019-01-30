@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    .btn {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      -webkit-transition-duration: 0.4s; /* Safari */
+      transition-duration: 0.4s;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+
+    /* Darker background on mouse-over */
+    .btn:hover {
+        background-color: #367f39;
+    }
+    /* Button used to open the contact form - fixed at the bottom of the page */
+    .open-button {
+      background-color: #555;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.8;
+      position: fixed;
+      bottom: 23px;
+      right: 28px;
+      width: 280px;
+    }
+
+    /* The popup form - hidden by default */
+    .form-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      right: 15px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+      max-width: 300px;
+      padding: 10px;
+      background-color: white;
+    }
+
+    /* Full-width input fields */
+    .form-container input[type=text], .form-container input[type=password] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      border: none;
+      background: #f1f1f1;
+    }
+
+    /* When the inputs get focus, do something */
+    .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+
+    /* Set a style for the submit/login button */
+    .form-container .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom:10px;
+      opacity: 0.8;
+    }
+
+    /* Add a red background color to the cancel button */
+    .form-container .cancel {
+      background-color: red;
+    }
+
+    /* Add some hover effects to buttons */
+    .form-container .btn:hover, .open-button:hover {
+      opacity: 1;
+      }
+    </style>
+    <title>GIS</title>
+    <script type="text/javascript" src="/static/scripts/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/static/scripts/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+            socket.on('my_response', function(msg) {
+                var sys = String(msg.sdata);
+                var system = JSON.parse(sys);
+                var tel = String(msg.data);
+                var telegrams = JSON.parse(tel);
+
+            });
+        });
+    </script>
+</head>
+<title>GIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/scripts/w3.css">
+<link rel="stylesheet" href="/static/scripts/css?family=Poppins">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-red w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:18px">Cerrar Menu</a>
+  <div class="w3-container">
+    <center>
+    <p></p>
+    <img src="/static/images/brainai.png" hspace="10" style="width:80%">
+    <h3 id='title' class="w3-padding-64"><b>Casa I-1 Girardot</b></h3>
+    </center>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Inicio</a>
+    <a href="#memories" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Recuerdos</a>
+    <a href="#living" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Sala</a>
+    <a href="#dining" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Comedor</a>
+    <a href="#bedroomff" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Habitación Piso 1</a>
+    <a href="#gym" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Gimnasio</a>
+    <a href="#study" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Estudio</a>
+    <a href="#bedroomm" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Habitación Principal</a>
+    <a href="#outside" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Exteriores</a>
+  </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">☰</a>
+  <span>Casa I-1 Girardot</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- Header -->
+  <div class="w3-container" style="margin-top:80px" id="memories">
+    <h1 class="w3-jumbo"><b>Bienvenido</b></h1>
+    <p> "Hay tantas cosas para gozar y nuestro paso por la tierra es tan corto, que sufrir es una pérdida de tiempo. Tenemos para gozar la nieve del invierno y las flores de la primavera.” Facundo Cabral.</p>
+    <h1 class="w3-xxxlarge w3-text-red"><b>Recuerdos</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+  </div>
+
+  <!-- Photo grid (modal) -->
+  <div class="w3-row-padding">
+    <div class="w3-half">
+      <img src="/static/images/family1.jpeg" style="width:100%" onclick="onClick(this)" alt="Paseo Ecologico">
+      <img src="/static/images/family2.jpeg" style="width:100%" onclick="onClick(this)" alt="Grado Giselle">
+      <img src="/static/images/family3.jpeg" style="width:100%" onclick="onClick(this)" alt="Cascada Volcanes">
+    </div>
+
+    <div class="w3-half">
+      <img src="/static/images/family4.jpeg" style="width:100%" onclick="onClick(this)" alt="Grado Miguel Ángel">
+      <img src="/static/images/family5.jpeg" style="width:100%" onclick="onClick(this)" alt="Aniversario Volcanes">
+      <img src="/static/images/family6.jpg" style="width:100%" onclick="onClick(this)" alt="Almuerzo Familiar">
+    </div>
+  </div>
+
+  <!-- Modal for full size images on click-->
+  <div id="modal01" class="w3-modal w3-black" style="padding-top:0" onclick="this.style.display='none'">
+    <span class="w3-button w3-black w3-xxlarge w3-display-topright">×</span>
+    <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+      <img id="img01" class="w3-image">
+      <p id="caption"></p>
+    </div>
+  </div>
+
+  <script>
+    function openForm(id_popup) {
+        var id = id_popup;
+        document.getElementById(id).style.display = "block";}
+    function closeForm(id_popup) {
+        var id = id_popup;
+        document.getElementById(id).style.display = "none";}
+  </script>
+
+  <!-- Living -->
+  <div class="w3-container" id="living" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Sala</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+    <button class="btn" onclick="openForm('lv_lso_popup')"><i class="fa fa-lightbulb-o"></i> Escalera</button><br>
+    <div class="form-popup" id="lv_lso_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Escalera</b></h2></center>
+        <button name="action" class="btn" value="knx-0/0/2-bin-1"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="knx-0/0/2-bin-0"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('lv_lso_popup')"> Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('lv_lst_popup')"><i class="fa fa-lightbulb-o"></i> Sala</button><br>
+    <div class="form-popup" id="lv_lst_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Sala</b></h2></center>
+        <button name="action" class="btn" value="knx-0/0/1-bin-1"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="knx-0/0/1-bin-0"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('lv_lst_popup')"> Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('lv_fan_popup')"><i class="fa fa-modx"></i> Ventilador</button><br>
+    <div class="form-popup" id="lv_fan_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Ventilador</b></h2></center>
+        <button name="action" class="btn" value="broad1-lr_fan-power-1"><i class="fa fa-modx"></i> Prender/apagar</button><br>
+        <button name="action" class="btn" value="broad1-lr_fan-up-1"><i class="fa fa-modx"></i> + Velocidad</button><br>
+        <button name="action" class="btn" value="broad1-lr_fan-down-1"><i class="fa fa-modx"></i> - Velocidad</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('lv_fan_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('lv_cur_popup')"><i class="fa fa-columns"></i> Cortina</button><br>
+    <div class="form-popup" id="lv_cur_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Cortina</b></h2></center>
+        <button name="action" class="btn" value="broad1-lr_cu-open-1"><i class="fa fa-columns"></i> Abrir</button><br>
+        <button name="action" class="btn" value="broad1-lr_cu-close-1"><i class="fa fa-columns"></i> Cerrar</button><br>
+        <button name="action" class="btn" value="broad1-lr_cu-stop-1"><i class="fa fa-columns"></i> Detener</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('lv_cur_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('lv_tvs_popup')"><i class="fa fa-television"></i> TV</button>
+    <div class="form-popup" id="lv_tvs_popup">
+      <form method="POST" class="form-container" style="overflow-y: scroll; height:50vh;">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>TV</b></h2></center>
+        <button name="action" class="btn" value="webostv-tv1-power-on"><i class="fa fa-television"></i> Prender</button><br>
+        <button name="action" class="btn" value="webostv-tv1-power-off"><i class="fa fa-television"></i> Apagar</button><br>
+        <button name="action" class="btn" value="webostv-tv1-vol-up"><i class="fa fa-television"></i> + Vol</button><br>
+        <button name="action" class="btn" value="webostv-tv1-vol-down"><i class="fa fa-television"></i> - Vol</button><br>
+        <button name="action" class="btn" value="webostv-tv1-ch-up"><i class="fa fa-television"></i> + Ch</button><br>
+        <button name="action" class="btn" value="webostv-tv1-ch-down"><i class="fa fa-television"></i> - Ch</button><br>
+        <button name="action" class="btn" value="webostv-tv1-source-2"><i class="fa fa-television"></i> HDMI</button><br>
+        <button name="action" class="btn" value="webostv-tv1-source-0"><i class="fa fa-television"></i> AV</button><br>
+        <button name="action" class="btn" value="webostv-tv1-applaunch-7"><i class="fa fa-television"></i> Youtube</button><br>
+      </form>
+      <form method="POST" class="form-container">
+        <button type="button" class="btn cancel" onclick="closeForm('lv_tvs_popup')">Close</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Dining -->
+  <div class="w3-container" id="dining" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Comedor</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+    <button class="btn" onclick="openForm('dn_ltb_popup')"><i class="fa fa-lightbulb-o"></i> Mesa</button><br>
+    <div class="form-popup" id="dn_ltb_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Mesa</b></h2></center>
+        <button name="action" class="btn" value="knx-0/0/3-bin-1"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="knx-0/0/3-bin-0"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('dn_ltb_popup')">Cerrar</button>
+      </form>
+    </div>
+    <button class="btn" onclick="openForm('dn_cur_popup')"><i class="fa fa-columns"></i> Cortina</button><br>
+    <div class="form-popup" id="dn_cur_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Cortina</b></h2></center>
+        <button name="action" class="btn" value="broad1-dr_cu-open-1"><i class="fa fa-columns"></i> Abrir</button><br>
+        <button name="action" class="btn" value="broad1-dr_cu-close-1"><i class="fa fa-columns"></i> Cerrar</button><br>
+        <button name="action" class="btn" value="broad1-dr_cu-stop-1"><i class="fa fa-columns"></i> Detener</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('dn_cur_popup')">Cerrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bedroom First Floor -->
+  <div class="w3-container" id="bedroomff" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Habitación Piso 1</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    <button class="btn" onclick="openForm('b1_lig_popup')"><i class="fa fa-lightbulb-o"></i> Luz</button><br>
+    <div class="form-popup" id="b1_lig_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Luz</b></h2></center>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('b1_lig_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('b1_fan_popup')"><i class="fa fa-modx"></i> Ventilador</button><br>
+    <div class="form-popup" id="b1_fan_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Ventilador</b></h2></center>
+        <button name="action" class="btn" value="broad1-r1_fan-power-1"><i class="fa fa-modx"></i> Prender/Apagar</button><br>
+        <button name="action" class="btn" value="broad1-r1_fan-up-1"><i class="fa fa-modx"></i> + Velocidad</button><br>
+        <button name="action" class="btn" value="broad1-dr_fan-down-1"><i class="fa fa-modx"></i> - Velocidad</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('b1_fan_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('b1_cur_popup')"><i class="fa fa-columns"></i> Cortina</button><br>
+    <div class="form-popup" id="b1_cur_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Cortina</b></h2></center>
+        <button name="action" class="btn" value="broad1-r1_cu-open-1"><i class="fa fa-columns"></i> Abrir</button><br>
+        <button name="action" class="btn" value="broad1-r1_cu-close-1"><i class="fa fa-columns"></i> Cerrar</button><br>
+        <button name="action" class="btn" value="broad1-r1_cu-stop-1"><i class="fa fa-columns"></i> Detener</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('b1_cur_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('b1_tvs_popup')"><i class="fa fa-television"></i> TV</button>
+    <div class="form-popup" id="b1_tvs_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>TV</b></h2></center>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> Prender</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> Apagar</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> HDMI</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> AV</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> Youtube</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('b1_tvs_popup')">Cerrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Gym -->
+  <div class="w3-container" id="gym" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Gimnasio</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    <button class="btn" onclick="openForm('gy_lli_popup')"><i class="fa fa-lightbulb-o"></i> Luz</button><br>
+    <div class="form-popup" id="gy_lli_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Luz</b></h2></center>
+        <button name="action" class="btn" value="knx-0/0/4-bin-1"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="knx-0/0/4-bin-0"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('gy_lli_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('gy_lmi_popup')"><i class="fa fa-lightbulb-o"></i> Espejo</button><br>
+    <div class="form-popup" id="gy_lmi_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Espejo</b></h2></center>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('gy_lmi_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('gy_fan_popup')"><i class="fa fa-modx"></i> Ventilador</button><br>
+    <div class="form-popup" id="gy_fan_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Ventilador</b></h2></center>
+        <button name="action" class="btn" value="broad1-gy_fan-power-1"><i class="fa fa-modx"></i> Prender/Apagar</button><br>
+        <button name="action" class="btn" value="broad1-gy_fan-up-1"><i class="fa fa-modx"></i> + Velocidad</button><br>
+        <button name="action" class="btn" value="broad1-gy_fan-down-1"><i class="fa fa-modx"></i> - Velocidad</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('gy_fan_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('gy_cur_popup')"><i class="fa fa-columns"></i> Cortina</button><br>
+    <div class="form-popup" id="gy_cur_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Cortina</b></h2></center>
+        <button name="action" class="btn" value="broad1-gy_cu-open-1"><i class="fa fa-columns"></i> Abrir</button><br>
+        <button name="action" class="btn" value="broad1-gy_cu-close-1"><i class="fa fa-columns"></i> Cerrar</button><br>
+        <button name="action" class="btn" value="broad1-gy_cu-stop-1"><i class="fa fa-columns"></i> Detener</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('gy_cur_popup')">Cerrar</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Study -->
+  <div class="w3-container" id="study" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Estudio</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    <button class="btn" onclick="openForm('st_lli_popup')"><i class="fa fa-lightbulb-o"></i> Luz</button><br>
+    <div class="form-popup" id="st_lli_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Luz</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('st_lli_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('st_fan_popup')"><i class="fa fa-modx"></i> Ventilador</button><br>
+    <div class="form-popup" id="st_fan_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Ventilador</b></h2></center>
+        <button name="action" class="btn" value="broad1-st_fan-power-1"><i class="fa fa-modx"></i> Prender/Apagar</button><br>
+        <button name="action" class="btn" value="broad1-st_fan-up-1"><i class="fa fa-modx"></i> + Velocidad</button><br>
+        <button name="action" class="btn" value="broad1-st_fan-down-1"><i class="fa fa-modx"></i> - Velocidad</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('st_fan_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('st_cur_popup')"><i class="fa fa-columns"></i> Cortina</button><br>
+    <div class="form-popup" id="st_cur_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Cortina</b></h2></center>
+        <button name="action" class="btn" value="broad1-st_cu-open-1"><i class="fa fa-columns"></i> Abrir</button><br>
+        <button name="action" class="btn" value="broad1-st_cu-close-1"><i class="fa fa-columns"></i> Cerrar</button><br>
+        <button name="action" class="btn" value="broad1-st_cu-stop-1"><i class="fa fa-columns"></i> Detener</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('st_cur_popup')">Cerrar</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Main Bedroom -->
+  <div class="w3-container" id="bedroomm" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Habitación Principal</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    <button class="btn" onclick="openForm('mr_lmi_popup')"><i class="fa fa-lightbulb-o"></i> Espejo Baño</button><br>
+    <div class="form-popup" id="mr_lmi_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Espejo Baño</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lmi_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_lwa_popup')"><i class="fa fa-lightbulb-o"></i> Lava Manos</button><br>
+    <div class="form-popup" id="mr_lwa_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Lava Manos</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lwa_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_lsw_popup')"><i class="fa fa-lightbulb-o"></i> Ducha</button><br>
+    <div class="form-popup" id="mr_lsw_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Ducha</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lsw_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_lta_popup')"><i class="fa fa-lightbulb-o"></i> Mesas Noche</button><br>
+    <div class="form-popup" id="mr_lta_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Mesas Noche</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lta_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_lwa_popup')"><i class="fa fa-lightbulb-o"></i> Muro</button><br>
+    <div class="form-popup" id="mr_lwa_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Muro</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lwa_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_lha_popup')"><i class="fa fa-lightbulb-o"></i> Pasillo</button><br>
+    <div class="form-popup" id="mr_lha_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Pasillo</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lha_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_lba_popup')"><i class="fa fa-lightbulb-o"></i> Balcon</button><br>
+    <div class="form-popup" id="mr_lba_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Balcon</b></h2></center>
+        <button name="action" class="btn" value="listairs_oo"><i class="fa fa-lightbulb-o"></i> Prender/Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_lba_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_fan_popup')"><i class="fa fa-modx"></i> Ventilador</button><br>
+    <div class="form-popup" id="mr_fan_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Ventilador</b></h2></center>
+        <button name="action" class="btn" value="broad1-rm_fan-power-1"><i class="fa fa-modx"></i> Prender/Apagar</button><br>
+        <button name="action" class="btn" value="broad1-rm_fan-up-1"><i class="fa fa-modx"></i> + Velocidad</button><br>
+        <button name="action" class="btn" value="broad1-rm_fan-down-1"><i class="fa fa-modx"></i> - Velocidad</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_fan_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_cur_popup')"><i class="fa fa-columns"></i> Cortina</button><br>
+    <div class="form-popup" id="mr_cur_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Cortina</b></h2></center>
+        <button name="action" class="btn" value="broad1-rm_cu-open-1"><i class="fa fa-columns"></i> Abrir</button><br>
+        <button name="action" class="btn" value="broad1-rm_cu-close-1"><i class="fa fa-columns"></i> Cerrar</button><br>
+        <button name="action" class="btn" value="broad1-rm_cu-stop-1"><i class="fa fa-columns"></i> Detener</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_cur_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('mr_tvs_popup')"><i class="fa fa-television"></i> TV</button>
+    <div class="form-popup" id="mr_tvs_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>TV</b></h2></center>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> Prender</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> Apagar</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> HDMI</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> AV</button><br>
+        <button name="action" class="btn" value="Sofa"><i class="fa fa-television"></i> Youtube</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('mr_tvs_popup')">Cerrar</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Outside -->
+  <div class="w3-container" id="outside" style="margin-top:75px">
+    <h1 class="w3-xxxlarge w3-text-red"><b>Exteriores</b></h1>
+    <hr style="width:50px;border:5px solid red" class="w3-round">
+
+    <button class="btn" onclick="openForm('os_lga_popup')"><i class="fa fa-lightbulb-o"></i> Garaje</button><br>
+    <div class="form-popup" id="os_lga_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Garaje</b></h2></center>
+        <button name="action" class="btn" value="knx-0/0/6-bin-1"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="knx-0/0/6-bin-0"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('os_lga_popup')">Cerrar</button>
+      </form>
+    </div>
+
+    <button class="btn" onclick="openForm('os_ltr_popup')"><i class="fa fa-lightbulb-o"></i> Terraza</button><br>
+    <div class="form-popup" id="os_ltr_popup">
+      <form method="POST" class="form-container">
+        <center><h2 class="w3-xxlarge w3-text-red"><b>Terraza</b></h2></center>
+        <button name="action" class="btn" value="knx-0/0/7-bin-1"><i class="fa fa-lightbulb-o"></i> Prender</button><br>
+        <button name="action" class="btn" value="knx-0/0/7-bin-0"><i class="fa fa-lightbulb-o"></i> Apagar</button><br>
+        <button type="button" class="btn cancel" onclick="closeForm('os_ltr_popup')">Cerrar</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- The Team -->
+  <div class="w3-row-padding w3-grayscale" style="margin-top:75px">
+    <div class="w3-col m4 w3-margin-bottom">
+      <div class="w3-light-grey">
+        <p><b>Nuestros diseñadores son cuidadosamente seleccionados!</b>:</p>
+        <img src="/static/images/miguelangel.jpeg" alt="Angel" style="width:100%">
+        <div class="w3-container">
+          <h3>Miguel Ángel Rodríguez Segura</h3>
+          <p class="w3-opacity">CEO & Founder</p>
+          <p>The most complete smart home's engineer ever !</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form method="POST" class="form-container">
+    <button name="action" class="btn" value="friki"><i class="fa fa-search"></i> Zona Friki</button><br>
+  </form>
+
+
+<!-- End page content -->
+</div>
+
+<!-- W3.CSS Container -->
+<div class="w3-light-grey w3-container w3-padding-32" style="margin-top:10px;padding-right:58px"><p class="w3-right">Impulsado por <a href="https://www.google.com" title="Google" target="_blank" class="w3-hover-opacity">Angel Intelligence of Everything</a></p></div>
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("myOverlay").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("myOverlay").style.display = "none";
+}
+
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+</script>
+
+</body>
+</html>
